@@ -1,6 +1,6 @@
 # Table: keycloak_user
 
-Obtaining basic user information from the Keycloak instance.
+Obtaining basic user information from the Keycloak realm.
 
 ## Examples
 

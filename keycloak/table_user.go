@@ -7,22 +7,10 @@ import (
     "github.com/turbot/steampipe-plugin-sdk/grpc/proto"
     "github.com/turbot/steampipe-plugin-sdk/plugin"
     "github.com/turbot/steampipe-plugin-sdk/plugin/transform"
-    "time"
 )
 
 // TODO: Optional KeyColumns to Filter more efficiently
 // TODO: Increase Perf...
-
-type User struct {
-    ID string
-    Username string
-    Email string
-    FirstName string
-    LastName string
-    Enabled bool
-    EmailVerified bool
-    Created time.Time
-}
 
 func tableUser() *plugin.Table {
     return &plugin.Table{

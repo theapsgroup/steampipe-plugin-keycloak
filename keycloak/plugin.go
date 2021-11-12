@@ -15,7 +15,8 @@ func Plugin(ctx context.Context) *plugin.Plugin {
         },
         DefaultTransform: transform.FromGo().NullIfZero(),
         TableMap: map[string]*plugin.Table{
-            "keycloak_user": tableUser(),
+            "keycloak_user":  tableUser(),
+            "keycloak_group": tableGroup(),
         },
     }
 
