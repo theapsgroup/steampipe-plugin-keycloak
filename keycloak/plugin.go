@@ -15,7 +15,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
         },
         DefaultTransform: transform.FromGo().NullIfZero(),
         TableMap: map[string]*plugin.Table{
-        // TODO: Add Tables
+            "keycloak_user": tableUser(),
         },
     }
 

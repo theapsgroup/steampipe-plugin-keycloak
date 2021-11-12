@@ -5,7 +5,7 @@ import (
     "github.com/turbot/steampipe-plugin-sdk/plugin/schema"
 )
 
-type KeycloakConfig struct {
+type PluginConfig struct {
     BaseUrl  *string `cty:"baseurl"`
     User     *string `cty:"user"`
     Password *string `cty:"password"`
@@ -28,14 +28,14 @@ var ConfigSchema = map[string]*schema.Attribute{
 }
 
 func ConfigInstance() interface{} {
-    return &KeycloakConfig{}
+    return &PluginConfig{}
 }
 
-func GetConfig(connection *plugin.Connection) KeycloakConfig {
+func GetConfig(connection *plugin.Connection) PluginConfig {
     if connection == nil || connection.Config == nil {
-        return KeycloakConfig{}
+        return PluginConfig{}
     }
 
-    config, _ := connection.Config.(KeycloakConfig)
+    config, _ := connection.Config.(PluginConfig)
     return config
 }
