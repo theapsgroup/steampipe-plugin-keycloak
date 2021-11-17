@@ -18,6 +18,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
             "keycloak_user":         tableUser(),
             "keycloak_group":        tableGroup(),
             "keycloak_group_member": tableGroupMember(),
+            "keycloak_client":       tableClient(),
         },
     }
 
