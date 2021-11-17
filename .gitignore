@@ -38,3 +38,6 @@ steampipe-plugin-keycloak.plugin
 
 # Goland
 .idea/
+
+# Misc
+copy.sh
