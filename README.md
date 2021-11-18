@@ -1,3 +1,5 @@
+![image](https://github.com/theapsgroup/steampipe-plugin-keycloak/raw/main/docs/keycloak-social-graphic.png)
+
 # Keycloak Plugin for Steampipe [WIP]
 
 > THIS IS NOT ACTIVE NOR WORKING YET - DO NOT USE
