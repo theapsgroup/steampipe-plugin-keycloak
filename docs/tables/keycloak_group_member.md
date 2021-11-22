@@ -4,7 +4,7 @@ Obtaining group members from a group, however **you must specify which group** i
 
 ## Examples
 
-## List members for a specific group
+### List members for a specific group
 
 ```sql
 select 
@@ -14,7 +14,7 @@ from
 where group_id = '0eb3fe4f-f13c-4931-865c-7d6ba5a1b9fa';
 ```
 
-## List members for all groups
+### List members for all groups
 
 ```sql
 select
