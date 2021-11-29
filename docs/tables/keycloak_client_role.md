@@ -1,6 +1,6 @@
 # Table: keycloak_client_role
 
-Obtaining client roles for clients in the Keycloak realm.
+Obtaining client roles for clients in the Keycloak realm, however **you must specify a `client_id` (this is `id` in the `keycloak_client` table) in there where or join clause**
 
 ## Examples
 

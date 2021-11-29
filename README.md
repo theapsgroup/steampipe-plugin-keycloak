@@ -1,8 +1,6 @@
 ![image](https://github.com/theapsgroup/steampipe-plugin-keycloak/raw/main/docs/keycloak-social-graphic.png)
 
-# Keycloak Plugin for Steampipe [WIP]
-
-> THIS IS NOT ACTIVE NOR WORKING YET - DO NOT USE
+# Keycloak Plugin for Steampipe
 
 Use SQL to query information including Users, Groups, Clients, Roles and more from Keycloak.
 
@@ -19,7 +17,7 @@ Install the plugin with [Steampipe](https://steampipe.io):
 steampipe plugin install theapsgroup/keycloak
 ```
 
-Setup the configuration:
+Set up the configuration:
 
 ```shell
 vi ~/.steampipe/config/keycloak.spc
@@ -35,7 +33,7 @@ or set the following Environment Variables
 Run a query:
 
 ```sql
-select * from keycloak_user
+select * from keycloak_user;
 ```
 
 ## Developing
