@@ -18,11 +18,25 @@ func tableUser() *plugin.Table {
 		Description: "Keycloak users and relevant information",
 		List: &plugin.ListConfig{
 			Hydrate: listUsers,
+			KeyColumns: []*plugin.KeyColumn{
+				{
+					Name: "first_name",
+					Require: plugin.Optional,
+				},
+				{
+					Name: "last_name",
+					Require: plugin.Optional,
+				},
+				{
+					Name: "enabled",
+					Require: plugin.Optional,
+				},
+			},
 		},
-		//Get: &plugin.GetConfig{
-		//    KeyColumns: plugin.AnyColumn([]string{"username", "email"}),
-		//    Hydrate: getUser,
-		//},
+		Get: &plugin.GetConfig{
+		   KeyColumns: plugin.AnyColumn([]string{"id", "username", "email"}),
+		   Hydrate: getUser,
+		},
 		Columns: userColumns(),
 	}
 }
@@ -84,6 +98,23 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 	doneCount := 0
 	criteria := gocloak.GetUsersParams{BriefRepresentation: BoolAddr(true)}
 
+	// Additional Filters
+	q := d.KeyColumnQuals
+
+	if q["first_name"] != nil {
+		fn := q["first_name"].GetStringValue()
+		criteria.FirstName = &fn
+	}
+	if q["last_name"] != nil {
+		ln := q["last_name"].GetStringValue()
+		criteria.LastName = &ln
+	}
+	if q["enabled"] != nil {
+		e := q["enabled"].GetBoolValue()
+		criteria.Enabled = &e
+	}
+
+
 	userCount, err := kc.api.GetUserCount(ctx, kc.token.AccessToken, kc.realm, criteria)
 	if err != nil {
 		return nil, fmt.Errorf("error obtaining user count: %v", err)
@@ -113,4 +144,43 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 		offset += perPage
 	}
 	return nil, nil
+}
+
+func getUser(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	kc, err := connect(ctx, d)
+	if err != nil {
+		return nil, err
+	}
+
+	userId := d.KeyColumnQuals["id"].GetStringValue()
+	userName := d.KeyColumnQuals["username"].GetStringValue()
+	userEmail := d.KeyColumnQuals["email"].GetStringValue()
+	maxReturn := 1
+
+	if userId != "" {
+		user, err := kc.api.GetUserByID(ctx, kc.token.AccessToken, kc.realm, userId)
+		if err != nil {
+			return nil, fmt.Errorf("error obtaining user with id: %s - %v", userId, err)
+		}
+		return user, nil
+	} else {
+
+		criteria := gocloak.GetUsersParams {
+			BriefRepresentation: gocloak.BoolP(true),
+			Email: &userEmail,
+			Username: &userName,
+			Max: &maxReturn,
+		}
+
+		users, err := kc.api.GetUsers(ctx, kc.token.AccessToken, kc.realm, criteria)
+		if err != nil {
+			return nil, fmt.Errorf("error obtaining users: %v", err)
+		}
+
+		if len(users) == 0 {
+			return nil, nil
+		} else {
+			return users[0], nil
+		}
+	}
 }
