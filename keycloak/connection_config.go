@@ -6,14 +6,14 @@ import (
 )
 
 type PluginConfig struct {
-	BaseUrl  *string `cty:"baseurl"`
+	BaseUrl  *string `cty:"base_url"`
 	User     *string `cty:"user"`
 	Password *string `cty:"password"`
 	Realm    *string `cty:"realm"`
 }
 
 var ConfigSchema = map[string]*schema.Attribute{
-	"baseurl": {
+	"base_url": {
 		Type: schema.TypeString,
 	},
 	"user": {

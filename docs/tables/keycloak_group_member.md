@@ -28,3 +28,20 @@ left join
 on
   g.id = gm.group_id;
 ```
+
+### List members for a specific group by name
+
+```sql
+select
+  g.name,
+  g.path,
+  gm.username,
+  gm.email
+from keycloak_group g
+left join
+  keycloak_group_member gm
+on
+  g.id = gm.group_id
+where
+  g.name = 'my-group';
+```

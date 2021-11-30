@@ -5,6 +5,7 @@ Obtaining client roles for clients in the Keycloak realm, however **you must spe
 ## Examples
 
 ### List all client roles for every client
+
 ```sql
 select
   c.client_id client,
@@ -17,7 +18,8 @@ on
   c.id = cr.client_id;
 ```
 
-### List client roles for a single client
+### List client roles for a single client by unique id
+
 ```sql
 select 
   *
@@ -26,3 +28,20 @@ from
 where
   client_id = '53a020bf-8ddf-4f24-9f66-c7310e116f97'
 ```
+
+### List client roles for a single client by friendly id
+
+```sql
+select
+  c.client_id client,
+  c.name,
+  cr.name role_name
+from keycloak_client c
+left join
+  keycloak_client_role cr
+on
+  c.id = cr.client_id
+where
+  c.client_id = 'my-client';
+```
+
