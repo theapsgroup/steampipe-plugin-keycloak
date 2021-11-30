@@ -2,7 +2,7 @@
 organization: The APS Group
 category: ["security"]
 icon_url: "/images/plugins/theapsgroup/keycloak.svg"
-brand_color: "#FCA121"
+brand_color: "#33C6E9"
 display_name: "Keycloak"
 short_name: "keycloak"
 description: "Steampipe plugin for querying Keycloak users, groups and other resources."
@@ -50,7 +50,7 @@ Configuration File:
 ```hcl
 connection "keycloak" {
   plugin   = "theapsgroup/keycloak"
-  baseurl  = "https://sso.mycompany.com/"
+  base_url  = "https://sso.mycompany.com/"
   realm    = "example"
   user     = "my-admin-account"
   password = "eXamPl3P@$$w0rD"

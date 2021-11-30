@@ -9,9 +9,6 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/plugin/transform"
 )
 
-// TODO: Optional KeyColumns to Filter more efficiently
-// TODO: Increase Perf...
-
 func tableUser() *plugin.Table {
 	return &plugin.Table{
 		Name:        "keycloak_user",
@@ -93,7 +90,16 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 	if err != nil {
 		return nil, err
 	}
+
+	// Set page size to `limit` if limit is less than page size.
+	limit := d.QueryContext.Limit
 	perPage := 1000
+	if limit != nil {
+		if *limit < int64(perPage) {
+			perPage = int(*limit)
+		}
+	}
+
 	offset := 0
 	doneCount := 0
 	criteria := gocloak.GetUsersParams{BriefRepresentation: BoolAddr(true)}
@@ -135,6 +141,11 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 
 		for _, user := range users {
 			d.StreamListItem(ctx, user)
+			
+			// Context cancellation can be manual or limit hit
+			if plugin.IsCancelled(ctx) {
+				return nil, nil
+			}
 		}
 
 		doneCount += len(users)

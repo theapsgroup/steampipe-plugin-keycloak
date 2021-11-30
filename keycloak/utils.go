@@ -42,7 +42,7 @@ func connect(ctx context.Context, d *plugin.QueryData) (*Keycloak, error) {
 		errorMsg := ""
 
 		if baseUrl == "" {
-			errorMsg += missingConfigOptionError("baseurl", "KEYCLOAK_ADDR")
+			errorMsg += missingConfigOptionError("base_url", "KEYCLOAK_ADDR")
 		}
 
 		if user == "" {
