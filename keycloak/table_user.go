@@ -3,10 +3,11 @@ package keycloak
 import (
 	"context"
 	"fmt"
+
 	"github.com/Nerzal/gocloak/v9"
-	"github.com/turbot/steampipe-plugin-sdk/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v3/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v3/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v3/plugin/transform"
 )
 
 func tableUser() *plugin.Table {
@@ -17,22 +18,22 @@ func tableUser() *plugin.Table {
 			Hydrate: listUsers,
 			KeyColumns: []*plugin.KeyColumn{
 				{
-					Name: "first_name",
+					Name:    "first_name",
 					Require: plugin.Optional,
 				},
 				{
-					Name: "last_name",
+					Name:    "last_name",
 					Require: plugin.Optional,
 				},
 				{
-					Name: "enabled",
+					Name:    "enabled",
 					Require: plugin.Optional,
 				},
 			},
 		},
 		Get: &plugin.GetConfig{
-		   KeyColumns: plugin.AnyColumn([]string{"id", "username", "email"}),
-		   Hydrate: getUser,
+			KeyColumns: plugin.AnyColumn([]string{"id", "username", "email"}),
+			Hydrate:    getUser,
 		},
 		Columns: userColumns(),
 	}
@@ -120,7 +121,6 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 		criteria.Enabled = &e
 	}
 
-
 	userCount, err := kc.api.GetUserCount(ctx, kc.token.AccessToken, kc.realm, criteria)
 	if err != nil {
 		return nil, fmt.Errorf("error obtaining user count: %v", err)
@@ -141,7 +141,7 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 
 		for _, user := range users {
 			d.StreamListItem(ctx, user)
-			
+
 			// Context cancellation can be manual or limit hit
 			if plugin.IsCancelled(ctx) {
 				return nil, nil
@@ -176,11 +176,11 @@ func getUser(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (i
 		return user, nil
 	} else {
 
-		criteria := gocloak.GetUsersParams {
+		criteria := gocloak.GetUsersParams{
 			BriefRepresentation: gocloak.BoolP(true),
-			Email: &userEmail,
-			Username: &userName,
-			Max: &maxReturn,
+			Email:               &userEmail,
+			Username:            &userName,
+			Max:                 &maxReturn,
 		}
 
 		users, err := kc.api.GetUsers(ctx, kc.token.AccessToken, kc.realm, criteria)

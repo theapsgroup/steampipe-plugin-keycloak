@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/Nerzal/gocloak/v9"
-	"github.com/turbot/steampipe-plugin-sdk/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v3/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v3/plugin"
 )
 
 func tableClient() *plugin.Table {
