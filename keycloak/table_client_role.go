@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/Nerzal/gocloak/v9"
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableClientRole() *plugin.Table {
@@ -59,8 +59,7 @@ func listClientRoles(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrate
 		return nil, err
 	}
 
-	q := d.KeyColumnQuals
-	clientId := q["client_id"].GetStringValue()
+	clientId := d.EqualsQualString("client_id")
 	if clientId == "" {
 		return nil, fmt.Errorf("keycloak_client_role List call requires an '=' qualifier for 'client_id'")
 	}

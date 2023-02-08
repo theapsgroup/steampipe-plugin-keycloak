@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/Nerzal/gocloak/v9"
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableUserGroup() *plugin.Table {
@@ -54,8 +54,7 @@ func listUserGroups(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 		return nil, err
 	}
 
-	q := d.KeyColumnQuals
-	userId := q["user_id"].GetStringValue()
+	userId := d.EqualsQualString("user_id")
 	if userId == "" {
 		return nil, fmt.Errorf("keycloak_user_group List call requires an '=' qualifier for 'user_id'")
 	}
