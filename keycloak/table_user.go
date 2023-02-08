@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/Nerzal/gocloak/v9"
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableUser() *plugin.Table {
@@ -106,7 +106,7 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 	criteria := gocloak.GetUsersParams{BriefRepresentation: BoolAddr(true)}
 
 	// Additional Filters
-	q := d.KeyColumnQuals
+	q := d.EqualsQuals
 
 	if q["first_name"] != nil {
 		fn := q["first_name"].GetStringValue()
@@ -163,9 +163,9 @@ func getUser(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (i
 		return nil, err
 	}
 
-	userId := d.KeyColumnQuals["id"].GetStringValue()
-	userName := d.KeyColumnQuals["username"].GetStringValue()
-	userEmail := d.KeyColumnQuals["email"].GetStringValue()
+	userId := d.EqualsQualString("id")
+	userName := d.EqualsQualString("username")
+	userEmail := d.EqualsQualString("email")
 	maxReturn := 1
 
 	if userId != "" {

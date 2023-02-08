@@ -1,3 +1,8 @@
+## v0.2.0 [WIP]
+
+_Enhancements_
+- Upgraded Steampipe SDK version to v5.1.2
+
 ## v0.1.1 [2022-10-08]
 
 _Enhancements_
