@@ -49,13 +49,16 @@ func userGroupColumns() []*plugin.Column {
 
 // Hydrate Functions
 func listUserGroups(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	plugin.Logger(ctx).Debug("listUserGroups", "started")
 	kc, err := connect(ctx, d)
 	if err != nil {
-		return nil, err
+		plugin.Logger(ctx).Error("listUserGroups", fmt.Sprintf("unable to connect to Keycloak instance: %v", err))
+		return nil, fmt.Errorf("unable to connect to Keycloak instance: %v", err)
 	}
 
 	userId := d.EqualsQualString("user_id")
 	if userId == "" {
+		plugin.Logger(ctx).Error("listUserGroups", "no qualifier provided for user_id")
 		return nil, fmt.Errorf("keycloak_user_group List call requires an '=' qualifier for 'user_id'")
 	}
 
@@ -66,12 +69,15 @@ func listUserGroups(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateD
 
 	groups, err := kc.api.GetUserGroups(ctx, kc.token.AccessToken, kc.realm, userId, criteria)
 	if err != nil {
+		plugin.Logger(ctx).Error("listUserGroups", fmt.Sprintf("error obtaining group memberships for user_id %s: %v", userId, err))
 		return nil, fmt.Errorf("error obtaining group memberships for userId %s: %v", userId, err)
 	}
 
+	plugin.Logger(ctx).Debug("listUserGroups", fmt.Sprintf("obtained %d group membership(s) for userId %s", len(groups), userId))
 	for _, group := range groups {
 		d.StreamListItem(ctx, group)
 	}
 
+	plugin.Logger(ctx).Debug("listUserGroups", "completed successfully")
 	return nil, nil
 }

@@ -42,9 +42,11 @@ func groupColumns() []*plugin.Column {
 
 // Hydrate Functions
 func listGroups(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	plugin.Logger(ctx).Debug("listGroups", "started")
 	kc, err := connect(ctx, d)
 	if err != nil {
-		return nil, err
+		plugin.Logger(ctx).Error("listGroups", fmt.Sprintf("unable to connect to Keycloak instance: %v", err))
+		return nil, fmt.Errorf("unable to connect to Keycloak instance: %v", err)
 	}
 
 	criteria := gocloak.GetGroupsParams{
@@ -53,12 +55,15 @@ func listGroups(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 
 	groups, err := kc.api.GetGroups(ctx, kc.token.AccessToken, kc.realm, criteria)
 	if err != nil {
+		plugin.Logger(ctx).Error("listGroups", fmt.Sprintf("error obtaining groups: %v", err))
 		return nil, fmt.Errorf("error obtaining groups: %v", err)
 	}
 
+	plugin.Logger(ctx).Debug("listGroups", fmt.Sprintf("obtained %d group(s)", len(groups)))
 	for _, group := range groups {
 		d.StreamListItem(ctx, group)
 	}
 
+	plugin.Logger(ctx).Debug("listGroups", "completed successfully")
 	return nil, nil
 }

@@ -87,9 +87,11 @@ func userColumns() []*plugin.Column {
 
 // Hydrate Functions
 func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	plugin.Logger(ctx).Debug("listUsers", "started")
 	kc, err := connect(ctx, d)
 	if err != nil {
-		return nil, err
+		plugin.Logger(ctx).Error("listUsers", fmt.Sprintf("unable to connect to Keycloak instance: %v", err))
+		return nil, fmt.Errorf("unable to connect to Keycloak instance: %v", err)
 	}
 
 	// Set page size to `limit` if limit is less than page size.
@@ -111,20 +113,26 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 	if q["first_name"] != nil {
 		fn := q["first_name"].GetStringValue()
 		criteria.FirstName = &fn
+		plugin.Logger(ctx).Debug("listUsers", "filtering for first_name", fn)
 	}
 	if q["last_name"] != nil {
 		ln := q["last_name"].GetStringValue()
 		criteria.LastName = &ln
+		plugin.Logger(ctx).Debug("listUsers", "filtering for last_name", ln)
 	}
 	if q["enabled"] != nil {
 		e := q["enabled"].GetBoolValue()
 		criteria.Enabled = &e
+		plugin.Logger(ctx).Debug("listUsers", "filtering for enabled", e)
 	}
 
 	userCount, err := kc.api.GetUserCount(ctx, kc.token.AccessToken, kc.realm, criteria)
 	if err != nil {
+		plugin.Logger(ctx).Error("listUsers", fmt.Sprintf("error obtaining user count: %v", err))
 		return nil, fmt.Errorf("error obtaining user count: %v", err)
 	}
+
+	plugin.Logger(ctx).Debug("listUsers", "total user count matching filter criteria", userCount)
 
 	for {
 		criteria.Max = &perPage
@@ -132,10 +140,12 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 
 		users, err := kc.api.GetUsers(ctx, kc.token.AccessToken, kc.realm, criteria)
 		if err != nil {
+			plugin.Logger(ctx).Error("listUsers", fmt.Sprintf("error obtaining users: %v", err))
 			return nil, fmt.Errorf("error obtaining users: %v", err)
 		}
 
 		if len(users) == 0 {
+			plugin.Logger(ctx).Debug("listUsers", "current page returned 0 users, completing")
 			break
 		}
 
@@ -144,6 +154,7 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 
 			// Context cancellation can be manual or limit hit
 			if plugin.IsCancelled(ctx) {
+				plugin.Logger(ctx).Debug("listUsers", "completed via context cancellation")
 				return nil, nil
 			}
 		}
@@ -154,6 +165,8 @@ func listUsers(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 		}
 		offset += perPage
 	}
+
+	plugin.Logger(ctx).Debug("listUsers", "completed successfully")
 	return nil, nil
 }
 
