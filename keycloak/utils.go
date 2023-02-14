@@ -3,7 +3,7 @@ package keycloak
 import (
 	"context"
 	"fmt"
-	"github.com/Nerzal/gocloak/v9"
+	"github.com/Nerzal/gocloak/v12"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 	"os"
@@ -11,7 +11,7 @@ import (
 )
 
 type Keycloak struct {
-	api   gocloak.GoCloak
+	api   *gocloak.GoCloak
 	token *gocloak.JWT
 	realm string
 }
