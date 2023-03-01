@@ -75,19 +75,24 @@ func idpColumns() []*plugin.Column {
 
 // Hydrate Functions
 func listIdentityProviders(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	plugin.Logger(ctx).Debug("listIdentityProviders", "started")
 	kc, err := connect(ctx, d)
 	if err != nil {
-		return nil, err
+		plugin.Logger(ctx).Error("listIdentityProviders", fmt.Sprintf("unable to connect to Keycloak instance: %v", err))
+		return nil, fmt.Errorf("unable to connect to Keycloak instance: %v", err)
 	}
 
 	providers, err := kc.api.GetIdentityProviders(ctx, kc.token.AccessToken, kc.realm)
 	if err != nil {
+		plugin.Logger(ctx).Error("listIdentityProviders", fmt.Sprintf("error obtaining identity providers for realm %s: %v", kc.realm, err))
 		return nil, fmt.Errorf("error obtaining identity prodivers for realm %s: %v", kc.realm, err)
 	}
 
+	plugin.Logger(ctx).Debug("listIdentityProviders", fmt.Sprintf("obtained %d identity provider(s)", len(providers)))
 	for _, provider := range providers {
 		d.StreamListItem(ctx, provider)
 	}
 
+	plugin.Logger(ctx).Debug("listIdentityProviders", "completed successfully")
 	return nil, nil
 }

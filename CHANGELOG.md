@@ -2,6 +2,7 @@
 
 _Enhancements_
 - Upgraded Steampipe SDK version to v5.1.2
+- Upgraded gocloak version to v12.0.0
 
 ## v0.1.1 [2022-10-08]
 

@@ -3,7 +3,7 @@ package keycloak
 import (
 	"context"
 	"fmt"
-	"github.com/Nerzal/gocloak/v9"
+	"github.com/Nerzal/gocloak/v12"
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 )
@@ -96,21 +96,26 @@ func clientColumns() []*plugin.Column {
 
 // Hydrate Functions
 func listClients(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	plugin.Logger(ctx).Debug("listClients", "started")
 	kc, err := connect(ctx, d)
 	if err != nil {
-		return nil, err
+		plugin.Logger(ctx).Error("listClients", fmt.Sprintf("unable to connect to Keycloak instance: %v", err))
+		return nil, fmt.Errorf("unable to connect to Keycloak instance: %v", err)
 	}
 
 	criteria := gocloak.GetClientsParams{}
 
 	clients, err := kc.api.GetClients(ctx, kc.token.AccessToken, kc.realm, criteria)
 	if err != nil {
+		plugin.Logger(ctx).Error("listClients", fmt.Sprintf("error obtaining clients: %v", err))
 		return nil, fmt.Errorf("error obtaining clients: %v", err)
 	}
 
+	plugin.Logger(ctx).Debug("listClients", fmt.Sprintf("obtained %d client(s)", len(clients)))
 	for _, client := range clients {
 		d.StreamListItem(ctx, client)
 	}
 
+	plugin.Logger(ctx).Debug("listClients", "completed successfully")
 	return nil, nil
 }

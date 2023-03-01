@@ -3,7 +3,7 @@ package keycloak
 import (
 	"context"
 	"fmt"
-	"github.com/Nerzal/gocloak/v9"
+	"github.com/Nerzal/gocloak/v12"
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
@@ -54,13 +54,16 @@ func clientRoleColumns() []*plugin.Column {
 
 // Hydrate Functions
 func listClientRoles(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
+	plugin.Logger(ctx).Debug("listClientRoles", "started")
 	kc, err := connect(ctx, d)
 	if err != nil {
-		return nil, err
+		plugin.Logger(ctx).Error("listClientRoles", fmt.Sprintf("unable to connect to Keycloak instance: %v", err))
+		return nil, fmt.Errorf("unable to connect to Keycloak instance: %v", err)
 	}
 
 	clientId := d.EqualsQualString("client_id")
 	if clientId == "" {
+		plugin.Logger(ctx).Error("listClientRoles", "no qualifier provided for client_id")
 		return nil, fmt.Errorf("keycloak_client_role List call requires an '=' qualifier for 'client_id'")
 	}
 
@@ -70,12 +73,15 @@ func listClientRoles(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrate
 
 	clientRoles, err := kc.api.GetClientRoles(ctx, kc.token.AccessToken, kc.realm, clientId, criteria)
 	if err != nil {
+		plugin.Logger(ctx).Error("listClientRoles", fmt.Sprintf("error obtaining client roles for client_id %s: %v", clientId, err))
 		return nil, fmt.Errorf("error obtaining client roles for client_id %s: %v", clientId, err)
 	}
 
+	plugin.Logger(ctx).Debug("listClientRoles", fmt.Sprintf("obtained %d client role(s) for clientId %s", len(clientRoles), clientId))
 	for _, clientRole := range clientRoles {
 		d.StreamListItem(ctx, clientRole)
 	}
 
+	plugin.Logger(ctx).Debug("listClientRoles", "completed successfully")
 	return nil, nil
 }
