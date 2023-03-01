@@ -1,8 +1,12 @@
-## v0.2.0 [WIP]
+## v0.2.0 [2023-03-01]
+
+_BREAKING_
+- This update uses gocloak v12 which is incompatible with Keycloak versions prior to 17.
 
 _Enhancements_
 - Upgraded Steampipe SDK version to v5.1.2
 - Upgraded gocloak version to v12.0.0
+- Added logging throughout for enhanced debugging capability
 
 ## v0.1.1 [2022-10-08]
 
