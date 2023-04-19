@@ -1,4 +1,4 @@
-## v0.2.1 [WIP]
+## v0.2.1 [2023-04-19]
 
 _What's new?_
 - Added new table `keycloak_event`
