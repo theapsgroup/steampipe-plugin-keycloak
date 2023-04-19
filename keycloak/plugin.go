@@ -22,6 +22,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"keycloak_client":       tableClient(),
 			"keycloak_client_role":  tableClientRole(),
 			"keycloak_idp":          tableIdp(),
+			"keycloak_event":        tableEvent(),
 		},
 	}
 

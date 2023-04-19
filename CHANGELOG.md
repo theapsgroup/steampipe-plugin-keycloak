@@ -1,3 +1,8 @@
+## v0.2.1 [WIP]
+
+_What's new?_
+- Added new table `keycloak_event`
+
 ## v0.2.0 [2023-03-01]
 
 _BREAKING_
