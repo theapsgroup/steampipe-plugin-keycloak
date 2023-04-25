@@ -92,3 +92,7 @@ func BoolAddr(b bool) *bool {
 func convertTimestamp(_ context.Context, input *transform.TransformData) (interface{}, error) {
 	return time.Unix(*input.Value.(*int64)/1000, 0), nil
 }
+
+func convertTimestampValue(_ context.Context, input *transform.TransformData) (interface{}, error) {
+	return time.Unix(input.Value.(int64)/1000, 0), nil
+}

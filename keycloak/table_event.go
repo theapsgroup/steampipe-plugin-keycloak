@@ -102,7 +102,7 @@ func eventColumns() []*plugin.Column {
 			Name:        "time",
 			Description: "Timestamp at which the event occurred",
 			Type:        proto.ColumnType_TIMESTAMP,
-			Transform:   transform.FromField("Time").Transform(convertTimestamp),
+			Transform:   transform.FromField("Time").Transform(convertTimestampValue),
 		},
 		{
 			Name:        "type",
