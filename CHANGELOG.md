@@ -1,8 +1,11 @@
-## v0.2.2 [WIP]
+## v0.2.2 [2023-05-05]
 
 _Enhancements_
 
-- Recompiled with [steampipe-plugin-sdk v5.3.0](https://github.com/turbot/steampipe-plugin-sdk/blob/main/CHANGELOG.md#v530-2023-03-16)
+- Recompiled with [steampipe-plugin-sdk v5.4.1](https://github.com/turbot/steampipe-plugin-sdk/blob/main/CHANGELOG.md#v541-2023-05-05)
+
+_Bug fixes_
+- Fixed a bug on the `keycloak_event` table with the `time` field conversion.
 
 ## v0.2.1 [2023-04-19]
 

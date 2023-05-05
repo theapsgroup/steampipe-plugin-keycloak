@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/Nerzal/gocloak/v12 v12.0.0
-	github.com/turbot/steampipe-plugin-sdk/v5 v5.3.0
+	github.com/turbot/steampipe-plugin-sdk/v5 v5.4.1
 )
 
 require (
