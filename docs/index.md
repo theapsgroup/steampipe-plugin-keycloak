@@ -56,3 +56,8 @@ connection "keycloak" {
   password = "eXamPl3P@$$w0rD"
 }
 ```
+
+## Get involved
+
+- Open source: https://github.com/theapsgroup/steampipe-plugin-keycloak
+- Community: [Join #steampipe on Slack →](https://turbot.com/community/join)

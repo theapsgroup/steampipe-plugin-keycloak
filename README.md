@@ -6,7 +6,7 @@ Use SQL to query information including Users, Groups, Clients, Roles and more fr
 
 - **[Get started →](https://hub.steampipe.io/plugins/theapsgroup/keycloak)**
 - Documentation: [Table definitions & examples](https://hub.steampipe.io/plugins/theapsgroup/keycloak/tables)
-- Community: [Slack Channel](https://join.slack.com/t/steampipe/shared_invite/zt-oij778tv-lYyRTWOTMQYBVAbtPSWs3g)
+- Community: [Join #steampipe on Slack →](https://turbot.com/community/join)
 - Get involved: [Issues](https://github.com/theapsgroup/steampipe-plugin-keycloak/issues)
 
 ## Quick start
